@@ -1,0 +1,1195 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <cstdlib>
+#include <conio.h> 
+#include <vector>
+
+#define ENTER 13
+#define BACKSPACE 8
+#define INTENTOS 3
+using namespace std;
+struct Producto
+{
+	int		codProducto;
+	string	nomProducto;
+	float	CanProducto;
+	float   SumaProducto;
+};
+vector<string> usuarios;
+vector<string> claves;
+vector<Producto> vecProducto;
+/*contraseña*/
+void InicioDelPrograma();
+void CrearContrasena();
+void Lacontrasena();
+/*Menu*/
+void irMenu();
+int	getCorrelativo();
+int postDelPrecioAlto();
+float getPrecioTotal();
+void AgregarProducto();
+/*Lacteos*/
+void AgregarLacteos();
+void SelecionLeche();
+void SelecionQueso();
+void SelecionYogurt();
+void SelecionMantequilla();
+/*Verduras*/
+void AgregarVerduras();
+void SelecionPapa();
+void SelecionLechuga();
+void SelecionZanahoria();
+void SelecionPepino();
+/*Bebidas*/
+void AgregarBebidas();
+void SelecionCielo();
+void SelecionSanMateo();
+void SelecionCocacola();
+void SelecionInkacola();
+/*Sanck*/
+void AgregarSanck();
+void SelecionPapaLa();
+void SelecionCheetos();
+void SelecionPiqueos();
+void SelecionOreo();
+/*otras funciones*/
+void EliminarProducto();
+void modifyVector();
+float getPrecioPorUnidad(string);
+int	obtenerPosicionDelRegistro(int);
+void listaProductos();
+void BoletaDeCompra();
+int main() 
+{
+	
+	InicioDelPrograma();
+	Lacontrasena();
+}
+void InicioDelPrograma()
+{
+	system("color B0");
+	char opcion;
+	do
+	{
+		cout << "\n\t\t\t\t\t\t\tBienvenido" << endl;
+		cout << "\t\t\t\t\t------------------------------------------" << endl;
+		cout << "\n\t\t\t\t\t   [1]Crear usuario  ||  [2]Logearse" << endl;
+		cout << "\n\t\t\t\t\tIngrese una opcion[1-2]: ";cin>>opcion;	
+		
+		switch(opcion)
+		{
+		case '1': system("cls"); CrearContrasena(); break;
+		case '2': system("cls"); Lacontrasena(); break;
+		default: system("cls"); break;
+		}
+		
+	}while(opcion!=2);
+}
+void CrearContrasena()
+{
+	system("color B0");
+	char opcion;
+	string nuevoUsuario, nuevaContrasena;
+	
+	cout <<"\n\t\t\t\t\t\tCree una Usuario y Contraseña "<< endl;
+	cout << "\t\t\t\t\t------------------------------------------" << endl;
+	cout <<"\n\t\t\t\t\tIngrese su nuevo nombre de usuario: ";
+	cin >> nuevoUsuario;
+	usuarios.push_back(nuevoUsuario);
+	
+	
+	cout <<"\t\t\t\t\tIngrese su nueva contraseña: ";
+	
+	char caracter;
+	caracter = getch();
+	
+	while (caracter != ENTER)
+	{
+		if (caracter != BACKSPACE)
+		{
+			nuevaContrasena.push_back(caracter);
+			cout << "*";
+		}
+		else
+		{
+			if (nuevaContrasena.length() > 0)
+			{
+				cout << "\b \b";
+				nuevaContrasena = nuevaContrasena.substr(0, nuevaContrasena.length() - 1);
+			}
+		}
+		
+		caracter = getch();
+	}
+	
+	claves.push_back(nuevaContrasena);
+	
+	
+	do
+	{
+		cout << "\n\t\t\t\t\tPresione [1] si quiere crear otro usuario || presione 2 para logearse: ";
+		cin >> opcion;
+		switch (opcion)
+		{
+		case '1': system("cls"); CrearContrasena(); break;
+		case '2': system("cls"); Lacontrasena(); break;
+		default: cout <<"\033[A\033[2K\033[F"; break;
+		}
+	} while (opcion != 1 && opcion != 2);
+}
+/*La contraseña*/
+void Lacontrasena()
+{	
+	system("color B0");
+	string usuario, password;
+	
+	int contador = 0;
+	bool ingresa = false;
+	
+	do
+	{
+		system("cls");
+		cout << "\n\t\t\t\t\t\tLOGIN DE USUARIO" << endl;
+		cout << "\t\t\t\t------------------------------------------------" << endl;
+		cout << "\n\t\t\t\t\tUsuario: ";cin >> usuario;
+		
+		char caracter;
+		
+		cout << "\t\t\t\t\tPassword: ";
+		caracter = getch();
+		
+		password = "";
+		
+		while (caracter != ENTER)
+		{
+			
+			if (caracter != BACKSPACE)
+			{
+				password.push_back(caracter);
+				cout << "*";
+			}
+			else
+			{
+				if (password.length() > 0)
+				{
+					cout << "\b \b";
+					password = password.substr(0, password.length() - 1);
+				}
+			}
+			
+			caracter = getch();
+		}
+		
+		for (int i = 0; i < usuarios.size(); i++)
+		{
+			if (usuarios[i] == usuario && claves[i] == password)
+			{
+				ingresa = true;
+				break;
+			}
+		}
+		
+		if (!ingresa)
+		{
+			cout << "\n\n\t\t\t\t\tEl usuario y/o password son incorrectos" << endl;
+			cout<<"\t\t\t\t"<<cin.get();
+			contador++;
+			system("pause");
+		}
+		
+	} while (ingresa == false && contador < INTENTOS);
+	
+	if (ingresa == false)
+	{
+		char rpta;
+		do
+		{
+			system("cls");
+			cout << "\n\n\t\t\t\t\tUsted no pudo ingresar al sistema. ADIOS" << endl;
+			cout << "\n\n\t\t\t\t\t\t[1] volver al Inicio: ";cin>>rpta;
+			switch(rpta)
+			{
+			case '1': system("cls"); InicioDelPrograma();
+			default: cout<<"\033[A\033[2K\033[F";
+			}
+		}while(rpta!='1');
+	}
+	else
+	{
+		system("cls");
+		return irMenu();
+	}
+}
+/*Menu de inicio*/
+void irMenu()
+{
+	system("color F0");
+	char opcion;
+	do
+	{
+		cout << "\n\t\t\t\t\t\tMENU DE OPCIONES\n"<<endl;
+		cout << "\t\t\t\t\tAgregar Productos__________[1]\n";
+		cout << "\t\t\t\t\tEliminar Producto__________[2]\n";
+		cout << "\t\t\t\t\tModificar Producto_________[3]\n";
+		cout << "\t\t\t\t\tListar producto____________[4]\n";
+		cout << "\t\t\t\t\tBoleta de compra___________[5]\n";
+		cout << "\t\t\t\t\tSalir______________________[6]\n";
+		cout << "\n\t\t\t\t\tIngrese una opcion[1-6]:";cin>>opcion;	
+		
+		switch (opcion)
+		{
+		case '1': system("cls"); AgregarProducto(); break;
+		case '2': system("cls"); EliminarProducto(); system("pause"); system("cls"); break;
+		case '3': system("cls"); modifyVector(); system("pause"); system("cls"); break;
+		case '4': system("cls"); listaProductos(); system("pause"); system("cls"); break;
+		case '5': system("cls"); BoletaDeCompra(); system("pause"); system("cls"); break;
+		case '6': vecProducto.clear(); Lacontrasena(); break;
+		default: system("cls");
+		}
+	}while (opcion!=6); 
+}
+/*Selecion de producto en la tienda */
+void AgregarProducto()
+{
+	char codigo;
+	string rpta;
+	do
+	{
+		cout<<"\t\t\t\t\tProductos a la venta \n";
+		cout<<"\t\t\t\t\tLacteos     [1]\n";
+		cout<<"\t\t\t\t\tVerduras    [2]\n";
+		cout<<"\t\t\t\t\tBebidas     [3]\n";
+		cout<<"\t\t\t\t\tsnack       [4]\n";
+		cout<<"\t\t\t\t\t---------------------"<<endl;
+		cout<<"\t\t\t\t\tIngrese la marca [1-4]: ";cin>>codigo;
+		
+		switch(codigo)
+		{
+		case '1': system("cls"); AgregarLacteos(); break;
+		case '2': system("cls"); AgregarVerduras(); break;
+		case '3': system("cls"); AgregarBebidas(); break;
+		case '4': system("cls"); AgregarSanck(); break;
+		default:  system("cls");
+		}
+		
+	} while (codigo!=4);
+	
+}
+/*Segunda selecion*/
+void AgregarLacteos()
+{
+	char codigo;
+	string rpta;
+	do
+	{
+		cout<<"\t\t\t\t\tProductos Lacteos \n";
+		cout<<"\t\t\t\t\tLeche |        S/.5.50  [1]\n";
+		cout<<"\t\t\t\t\tQueso |        S/.7.50  [2]\n";
+		cout<<"\t\t\t\t\tYogurt |       S/.2.00  [3]\n";
+		cout<<"\t\t\t\t\tMantequilla |  S/.10.50 [4]\n";
+		cout<<"\t\t\t\t\t---------------------"<<endl;
+		cout<<"\t\t\t\t\tIngrese la marca [1-4]: ";cin>>codigo;
+		
+		switch(codigo)
+		{
+		case '1': system("cls"); SelecionLeche(); break;
+		case '2': system("cls"); SelecionQueso(); break;
+		case '3': system("cls"); SelecionYogurt(); break;
+		case '4': system("cls"); SelecionMantequilla(); break;
+		default: system("cls");
+		}
+		system("cls");
+	} while (codigo!=4);
+	
+}
+void SelecionLeche()
+{
+	string	nombre="Leche";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*5.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod; 
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	cout<<"\t\t\t\t\t---------------------"<<endl;
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionLeche(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+	
+}
+void SelecionQueso()
+{
+	string	nombre="Queso";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*7.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionQueso(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+	
+}
+void SelecionYogurt()
+{
+	string	nombre="Yogurt"; 
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*2;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod; 
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionYogurt(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+	
+}
+void SelecionMantequilla()
+{
+	string	nombre="Mantequilla"; 
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*10.5;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionMantequilla(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+/*Verduras*/
+void AgregarVerduras()
+{
+	char codigo;
+	string rpta;
+	do
+	{
+		cout<<"\t\t\t\t\tVerduras por Unidad \n";
+		cout<<"\t\t\t\t\tPapa |        S/.1.20  [1]\n";
+		cout<<"\t\t\t\t\tLechuga |     S/.2.30  [2]\n";
+		cout<<"\t\t\t\t\tZanahoria |   S/.0.50  [3]\n";
+		cout<<"\t\t\t\t\tPepino |      S/.3.50  [4]\n";
+		cout<<"\t\t\t\t\t---------------------"<<endl;
+		cout<<"\t\t\t\t\tIngrese la marca [1-4]: ";cin>>codigo;
+		
+		switch(codigo)
+		{
+		case '1': system("cls"); SelecionPapa(); break;
+		case '2': system("cls"); SelecionLechuga(); break;
+		case '3': system("cls"); SelecionZanahoria(); break;
+		case '4': system("cls"); SelecionPepino(); break;
+		default: system("cls");
+		}
+		system("cls");
+	} while (codigo!=4);
+	
+}
+void SelecionPapa()
+{
+	string	nombre="Papa";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*1.20;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionPapa(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionLechuga()
+{
+	string	nombre="Lechuga";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*2.30;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionLechuga(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionZanahoria()
+{
+	string	nombre="Zanahoria";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*0.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionZanahoria(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionPepino()
+{
+	string	nombre="Pepino";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*3.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionPepino(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+/*Bebidas*/
+void AgregarBebidas()
+{
+	char codigo;
+	string rpta;
+	do
+	{
+		cout<<"\t\t\t\t\tBebidas por Unidad \n";
+		cout<<"\t\t\t\t\tCielo |         S/.1      [1]\n";
+		cout<<"\t\t\t\t\tSan Mateo |     S/.2      [2]\n";
+		cout<<"\t\t\t\t\tCoca Cola |     S/.2.50   [3]\n";
+		cout<<"\t\t\t\t\tInka cola |     S/.2.50   [4]\n";
+		cout<<"\t\t\t\t\t---------------------"<<endl;
+		cout<<"\t\t\t\t\tIngrese la marca [1-4]: ";cin>>codigo;
+		
+		switch(codigo)
+		{
+		case '1': system("cls"); SelecionCielo(); break;
+		case '2': system("cls"); SelecionSanMateo(); break;
+		case '3': system("cls"); SelecionCocacola(); break;
+		case '4': system("cls"); SelecionInkacola(); break;
+		default: system("cls");
+		}
+		system("cls");
+	} while (codigo!=4);
+	
+}
+void SelecionCielo()
+{
+	string	nombre="Cielo";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*1;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionCielo(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionSanMateo()
+{
+	string	nombre="SanMateo";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*2;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionSanMateo(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionCocacola()
+{
+	string	nombre="Coca Cola";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*2.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionCocacola(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionInkacola()
+{
+	string	nombre="Inka Cola";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*2.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionInkacola(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+/*Sanck*/
+void AgregarSanck()
+{
+	char codigo;
+	string rpta;
+	do
+	{
+		cout<<"\t\t\t\t\tProductos Sanck por Unidad \n";
+		cout<<"\t\t\t\t\tPapa Laiys |         S/.1.50  [1]\n";
+		cout<<"\t\t\t\t\tCheetos |            S/.1     [2]\n";
+		cout<<"\t\t\t\t\tPiqueo snax |        S/.1.30  [3]\n";
+		cout<<"\t\t\t\t\toreo |               S/.1.50  [4]\n";
+		cout<<"\t\t\t\t\t---------------------"<<endl;
+		cout<<"\t\t\t\t\tIngrese la marca [1-4]: ";cin>>codigo;
+		
+		switch(codigo)
+		{
+		case '1': system("cls"); SelecionPapaLa(); break;
+		case '2': system("cls"); SelecionCheetos(); break;
+		case '3': system("cls"); SelecionPiqueos(); break;
+		case '4': system("cls"); SelecionOreo(); break;
+		default: system("cls");
+		}
+		system("cls");
+	} while(codigo!=4);
+}
+void SelecionPapaLa()
+{
+	string	nombre="Papa Lays";
+	char rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*1.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionPapaLa(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionCheetos()
+{
+	string	nombre="Cheetos";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*1;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionCheetos(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionPiqueos()
+{
+	string	nombre="Piqueos";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*1.30;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionPiqueos(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void SelecionOreo()
+{
+	string	nombre="Oreo";
+	char    rpta;
+	int		cod;
+	float	CanPro, SumaPro=0;
+	
+	cod = getCorrelativo();
+	cout << "\t\t\t\t\tCodigo:"<<cod<<endl;
+	cout<<"\t\t\t\t\tProducto:"<<nombre<<endl;
+	cout << "\t\t\t\t\tCantidad :"; cin >> CanPro;
+	SumaPro=CanPro*1.50;
+	cout << "\t\t\t\t\tTotal seria:"<<SumaPro<<endl;
+	
+	
+	Producto producto;
+	producto.codProducto = cod;
+	producto.nomProducto = nombre;
+	producto.CanProducto = CanPro;
+	producto.SumaProducto = SumaPro;
+	
+	vecProducto.push_back(producto);
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Agregar otro || [2] Retoceder "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); SelecionOreo(); break;
+		case '2': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+
+/*otra cosa xd*/
+int getCorrelativo()
+{
+	if (vecProducto.size() == 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return vecProducto[vecProducto.size()-1].codProducto + 1;
+	}
+}
+int postDelPrecioAlto()
+{
+	int pos = 0;
+	float maximo = vecProducto[0].CanProducto;
+	for (int i = 0; i < vecProducto.size(); i++)
+	{
+		if (vecProducto[i].CanProducto > maximo)
+		{
+			maximo = vecProducto[i].CanProducto;
+			pos = i;
+		}
+	}
+	return pos;
+}
+float getPrecioTotal()
+{
+	float suma = 0;
+	for (int i = 0; i < vecProducto.size(); i++)
+	{
+		suma += vecProducto[i].SumaProducto;
+	}
+	return suma;
+}
+void EliminarProducto()
+{
+	char rpta;
+	int  cod;
+	bool flag = false;
+	cout << "\t\t\t\t\tIngrese el codigo del producto a eliminar:";
+	cin >> cod;
+	for (int i = 0; i < vecProducto.size(); i++)
+	{
+		if (cod == vecProducto[i].codProducto)
+		{
+			vecProducto.erase(vecProducto.begin() + i);
+			flag = true;
+			break;//Salir del for
+		}
+	}
+	//Validar si lo encontro
+	if (flag == true)
+	{
+		cout << "\t\t\t\t\tRegistro eliminado satisfactoriamente!!!\n";
+		do
+		{
+			cout << "\t\t\t\t\t[1] Eliminar ||  [2] Regresar: "; cin >>rpta;
+			switch(rpta)
+			{
+			case '1': system("cls"); EliminarProducto(); break;
+			case '2': system("cls"); irMenu(); break;
+			default: cout <<"\033[A\033[2K"; break;
+			}
+		}while(rpta!=1);
+		
+	}
+	else
+	{
+		cout <<"\t\t\t\t\tRegistro no encontrado!!!\n";
+	}
+}
+void modifyVector()
+{
+	int cod;
+	cout << "\t\t\t\t\tIngrese el codigo del registro a modificar:";
+	cin >> cod;
+	int posEncontrada = obtenerPosicionDelRegistro(cod);	
+	if (posEncontrada == -1)
+	{
+		cout << "\t\t\t\t\tEl codigo ingresado no existe!!!\n";
+	}
+	else
+	{
+		char rpta, opcion;
+		float _CanPro;
+		float precioPorUnidad = getPrecioPorUnidad(vecProducto[posEncontrada].nomProducto);
+		cout << "\t\t\t\t\tVer Registro a modificar\n";
+		cout << "\t\t\t\t\t________________________\n";
+		cout << "\t\t\t\t\tCodigo:" << vecProducto[posEncontrada].codProducto << endl;
+		cout << "\t\t\t\t\tCantidad :" << vecProducto[posEncontrada].CanProducto << endl;
+		cout << "\t\t\t\t\tTotal :" << vecProducto[posEncontrada].SumaProducto << endl;
+		cout << "\t\t\t\t\t________________________\n";
+		do
+		{
+			cout << "\t\t\t\t\t[1] Para modificar: "; cin >>opcion;
+			cin.ignore();
+			switch(opcion)
+			{
+			case '1': cout << "\t\t\t\t\tCambiar cantidad: ";cin>> _CanPro;
+			vecProducto[posEncontrada].CanProducto = _CanPro;
+			vecProducto[posEncontrada].SumaProducto = _CanPro * precioPorUnidad;
+			break;
+			default: cout <<"\033[A\033[2K"; break;
+			}
+		}while(opcion!='1');
+		do
+		{
+			cout << "\t\t\t\t\t[1] modificar  ||  [2] Regresar: "; cin >>rpta;
+			switch(rpta)
+			{
+			case '1': system("cls"); modifyVector(); break;
+			case '2': system("cls"); irMenu(); break;
+			default: cout <<"\033[A\033[2K"; break;
+			}
+		}while(rpta!=1);
+	}
+}
+float getPrecioPorUnidad(string nomProducto)
+{
+	if (nomProducto == "Leche") 
+	{
+		return 5.50;
+	}
+	if (nomProducto == "Queso") 
+	{
+		return 7.50;
+	}
+	if (nomProducto == "Yogurt") 
+	{
+		return 2;
+	}
+	if (nomProducto == "Mantequilla") 
+	{
+		return 10.5;
+	}
+	if (nomProducto == "Papa") 
+	{
+		return 1.20;
+	}
+	if (nomProducto == "Lechuga") 
+	{
+		return 2.30;
+	}
+	if (nomProducto == "Zanahoria") 
+	{
+		return 0.50;
+	}
+	if (nomProducto == "Pepino") 
+	{
+		return 3.50;
+	}
+	if (nomProducto == "Cielo") 
+	{
+		return 1;
+	}
+	if (nomProducto == "SanMateo") 
+	{
+		return 2;
+	}
+	if (nomProducto == "Coca cola") 
+	{
+		return 2.50;
+	}
+	if (nomProducto == "Inka Cola") 
+	{
+		return 2.50;
+	}
+	if (nomProducto == "Papa Lays") 
+	{
+		return 1.50;
+	}
+	if (nomProducto == "Cheetos") 
+	{
+		return 1;
+	}
+	if (nomProducto == "Piqueos") 
+	{
+		return 1.30;
+	}
+	if (nomProducto == "Oreo") 
+	{
+		return 1.50;
+	}
+	else 
+	{
+		return 1.0;
+	}
+}
+int obtenerPosicionDelRegistro(int codigo)
+{
+	for (int i = 0; i < vecProducto.size(); i++)
+	{
+		if (codigo == vecProducto[i].codProducto)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+void listaProductos()
+{
+	char rpta;
+	for (int i = 0; i < vecProducto.size(); i++)
+	{
+		cout << "\t\t\t\t\t-----------------------------------\n";
+		cout << "\t\t\t\t\tCodigo:" << vecProducto[i].codProducto << endl;
+		cout << "\t\t\t\t\tNombre:" << vecProducto[i].nomProducto << endl;
+		cout << "\t\t\t\t\tCantidad :" << vecProducto[i].CanProducto << endl;
+		cout << "\t\t\t\t\tPrecio:" << vecProducto[i].SumaProducto << endl;
+		cout << "\t\t\t\t\t-----------------------------------\n";
+	}
+	cout << "\t\t\t\t\tPago Total:" << getPrecioTotal() << endl;
+	
+	do
+	{
+		cout << "\t\t\t\t\t[1] Retoceder : "; cin >>rpta;
+		switch(rpta)
+		{
+		case '1': system("cls"); irMenu(); break;
+		default: cout <<"\033[A\033[2K"; break;
+		}
+		
+	}while(rpta!=2);
+}
+void BoletaDeCompra()
+{
+	cout<<"\t\t\t\t\t---------------------------------"<<endl;
+	cout<<"\t\t\t\t\tBoleta"<<endl;
+	cout<<"\t\t\t\t\tComercio S.A"<<endl;
+	cout<<"\t\t\t\t\tAv. Av. La Fontana 550, La Molina Location, La Molina"<<endl;
+	cout<<"\t\t\t\t\tLima-Lima-La Molina"<<endl;
+	
+	cout<<"\n\t\t\t\t\tBolecta electronica"<<endl;
+	for (int i = 0; i < vecProducto.size(); i++)
+	{
+		cout<<"\t\t\t\t\t\t"<< vecProducto[i].nomProducto;
+		cout<<"        "<<vecProducto[i].CanProducto << endl;
+	}
+	cout << "\n\t\t\t\t\tPago Total:" << getPrecioTotal() << endl;
+	cout<< "\t\t\t\t\tVirtual boleta electronica"<<endl;
+	cout<< "\t\t\t\t\tGracios por su compra"<<endl;
+	cout<<"\t\t\t\t\t---------------------------------"<<endl;
+}
